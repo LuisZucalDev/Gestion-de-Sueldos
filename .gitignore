@@ -1,0 +1,20 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.sln.docstates
+TestResults/
+Packages/
+*.nupkg
+*.nuspec
+
+# Logs y Datos generados
+informacion_empleado.txt
+informacion_sueldo.txt
+*.log
+
+# Opcional (Si usas ReSharper)
+_ReSharper*/
+*.ReSharper
