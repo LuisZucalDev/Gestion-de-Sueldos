@@ -44,8 +44,10 @@ namespace GestionSueldos.Services
         {
             if (horasTrabajadas < 0) throw new ArgumentException("Horas trabajadas inválidas.");
             if (horasExtras < 0) throw new ArgumentException("Horas extras inválidas.");
-            TasasAFP.TryGetValue(afp, out decimal tasaAFP);
-            TasasSalud.TryGetValue(salud, out decimal tasaSalud);
+            if (!TasasAFP.TryGetValue(afp, out decimal tasaAFP))
+                throw new ArgumentException($"AFP no reconocida: {afp}");
+            if (!TasasSalud.TryGetValue(salud, out decimal tasaSalud))
+                throw new ArgumentException($"Salud no reconocida: {salud}");
 
             decimal vh = valorHora > 0 ? valorHora : VALOR_HORA_DEFAULT;
             decimal vhe = valorExtra > 0 ? valorExtra : VALOR_EXTRA_DEFAULT;

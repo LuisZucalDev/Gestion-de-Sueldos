@@ -53,7 +53,7 @@ namespace GestionSueldos.Forms
                 lblValorSalud.Text = _ultimoResultado.DescuentoSalud.ToString("C");
                 lblCotizObl.Text = _ultimoResultado.CotizObligatoria.ToString("C");
                 lblRenta.Text = _ultimoResultado.ImpuestoRenta.ToString("C");
-                lblValorLiquido.Text = _ultimoResultado.SueldoLiquido.ToString("C");
+                lblValorLiquido.Text = _ultimoResultado.SueldoLiquido.ToString("C", CultureInfo.CurrentCulture);
 
                 pnlResultado.Visible = true;
                 btnGuardar.Enabled = true;
