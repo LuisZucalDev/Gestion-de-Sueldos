@@ -6,7 +6,7 @@ using GestionSueldos.Repositories;
 
 namespace GestionSueldos.Forms
 {
-    public partial class FrmListarTrabajadores : Form
+    public partial class FrmListarTrabajadores : BaseForm
     {
         private readonly IEmpleadoRepository _empleadoRepo;
         private readonly ISueldoRepository   _sueldoRepo;

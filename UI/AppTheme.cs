@@ -25,6 +25,9 @@ namespace GestionSueldos.UI
         public static readonly Color TextPrimary = Color.FromArgb(241, 245, 249);
         public static readonly Color TextMuted   = Color.FromArgb(100, 116, 139);
         public static readonly Color TextError   = Color.FromArgb(248, 113, 113);
+        public static readonly Color ShadowDark  = Color.FromArgb(0, 0, 0, 32);
+        public static readonly Color ShadowLight = Color.FromArgb(0, 0, 0, 16);
+        public static readonly Color GlowPrimary = Color.FromArgb(120, 99, 102, 241);
 
         // ── Bordes ───────────────────────────────────────────────
         public static readonly Color Border      = Color.FromArgb(51, 65, 85);

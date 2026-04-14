@@ -5,7 +5,7 @@ using GestionSueldos.Repositories;
 
 namespace GestionSueldos.Forms
 {
-    public partial class FrmAdministrador : Form
+public partial class FrmAdministrador : BaseForm
     {
         private readonly IEmpleadoRepository _empleadoRepo;
 
@@ -13,6 +13,9 @@ namespace GestionSueldos.Forms
         {
             InitializeComponent();
             _empleadoRepo = new EmpleadoFileRepository();
+            lblTitle.Text = "Gestión de Empleados";
+            lblSubtitle.Text = "Agregar, editar y listar trabajadores";
+            UpdateStatus("Empleados listos - 2 registros");
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)

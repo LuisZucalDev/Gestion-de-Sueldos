@@ -8,7 +8,7 @@ using GestionSueldos.Services;
 
 namespace GestionSueldos.Forms
 {
-    public partial class FrmCalculadoraSueldo : Form
+    public partial class FrmCalculadoraSueldo : BaseForm
     {
         private readonly SalaryCalculatorService _calculadoraService;
         private readonly ISueldoRepository       _sueldoRepo;
@@ -35,7 +35,8 @@ namespace GestionSueldos.Forms
             try
             {
                 decimal horas  = decimal.Parse(txtHorasTrabajadas.Text, CultureInfo.InvariantCulture);
-                decimal extras = decimal.Parse(txtHorasExtras.Text.Replace("", "0"), CultureInfo.InvariantCulture);
+                string extrasStr = txtHorasExtras.Text.Trim();
+                decimal extras = string.IsNullOrEmpty(extrasStr) ? 0 : decimal.Parse(extrasStr, CultureInfo.InvariantCulture);
 
                 _ultimoResultado = _calculadoraService.Calcular(
                     horas, extras,
@@ -57,7 +58,7 @@ namespace GestionSueldos.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error al calcular: {ex.Message}", "Error",
+                MessageBox.Show("Error al calcular: " + ex.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -96,8 +97,7 @@ namespace GestionSueldos.Forms
 
         private bool ValidarEntradas()
         {
-            if (!decimal.TryParse(txtHorasTrabajadas.Text, NumberStyles.Any,
-                    CultureInfo.InvariantCulture, out decimal horas) || horas < 0)
+            if (!decimal.TryParse(txtHorasTrabajadas.Text, out decimal horas) || horas < 0)
             {
                 MessageBox.Show("Ingresa un número válido de horas trabajadas.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -105,9 +105,8 @@ namespace GestionSueldos.Forms
                 return false;
             }
 
-            if (txtHorasExtras.Text.Length > 0 &&
-                (!decimal.TryParse(txtHorasExtras.Text, NumberStyles.Any,
-                    CultureInfo.InvariantCulture, out decimal extras) || extras < 0))
+            string extrasStr = txtHorasExtras.Text.Trim();
+            if (!string.IsNullOrEmpty(extrasStr) && (!decimal.TryParse(extrasStr, out decimal extras) || extras < 0))
             {
                 MessageBox.Show("Ingresa un número válido de horas extras.", "Validación",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);

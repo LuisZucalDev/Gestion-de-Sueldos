@@ -5,7 +5,7 @@ using GestionSueldos.Services;
 
 namespace GestionSueldos.Forms
 {
-    public partial class FrmLogin : Form
+    public partial class FrmLogin : BaseForm
     {
         private readonly AuthService           _authService;
         private readonly IEmpleadoRepository   _empleadoRepo;
