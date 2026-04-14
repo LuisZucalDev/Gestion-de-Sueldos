@@ -29,9 +29,13 @@ namespace GestionSueldos.Forms
         private Label        lblValorBruto;
         private Label        lblAFPDescLbl;
         private Label        lblValorAFP;
-        private Label        lblSaludDescLbl;
-        private Label        lblValorSalud;
-        private Panel        pnlLiquidoBorder;
+private Label        lblSaludDescLbl;
+private Label        lblValorSalud;
+private Label        lblCotizLbl;
+private Label        lblCotizObl;
+private Label        lblRentaLbl;
+private Label        lblRenta;
+private Panel        pnlLiquidoBorder;
         private Label        lblLiquidoTitle;
         private Label        lblValorLiquido;
         private ModernButton btnGuardar;
@@ -165,17 +169,23 @@ namespace GestionSueldos.Forms
             // Línea divisoria
             var sep = new Panel { Size = new Size(382, 1), Location = new Point(24, 90), BackColor = AppTheme.Border };
 
-            lblAFPDescLbl  = MakeLabel("Descuento AFP", new Point(24, 104));
-            lblValorAFP    = new Label { Text = "-$0", Font = AppTheme.FontLabelBold, ForeColor = AppTheme.AccentRed, AutoSize = true, Location = new Point(24, 124) };
+lblAFPDescLbl  = MakeLabel("Descuento AFP", new Point(24, 104));
+lblValorAFP    = new Label { Text = "-$0", Font = AppTheme.FontLabelBold, ForeColor = AppTheme.AccentRed, AutoSize = true, Location = new Point(24, 124) };
 
-            lblSaludDescLbl = MakeLabel("Descuento Salud", new Point(24, 158));
-            lblValorSalud   = new Label { Text = "-$0", Font = AppTheme.FontLabelBold, ForeColor = AppTheme.AccentRed, AutoSize = true, Location = new Point(24, 178) };
+lblSaludDescLbl = MakeLabel("Descuento Salud", new Point(24, 158));
+lblValorSalud   = new Label { Text = "-$0", Font = AppTheme.FontLabelBold, ForeColor = AppTheme.AccentRed, AutoSize = true, Location = new Point(24, 178) };
+
+lblCotizLbl = MakeLabel("Cotiz. Obligatoria", new Point(24, 212));
+lblCotizObl = new Label { Text = "-$0", Font = AppTheme.FontLabelBold, ForeColor = AppTheme.AccentRed, AutoSize = true, Location = new Point(24, 232) };
+
+lblRentaLbl = MakeLabel("Impuesto Renta", new Point(24, 266));
+lblRenta    = new Label { Text = "-$0", Font = AppTheme.FontLabelBold, ForeColor = AppTheme.AccentRed, AutoSize = true, Location = new Point(24, 286) };
 
             // Panel líquido con fondo especial
-            pnlLiquidoBorder = new Panel
+pnlLiquidoBorder = new Panel
             {
                 Size      = new Size(382, 100),
-                Location  = new Point(24, 220),
+                Location  = new Point(24, 320),
                 BackColor = Color.FromArgb(20, 99, 102, 241),
             };
             pnlLiquidoBorder.Paint += (s, e) =>
@@ -223,10 +233,12 @@ namespace GestionSueldos.Forms
             btnListar.SetSecondary();
             btnListar.Click += btnListar_Click;
 
-            pnlResultado.Controls.AddRange(new Control[] {
+pnlResultado.Controls.AddRange(new Control[] {
                 lblBrutoLbl, lblValorBruto, sep,
                 lblAFPDescLbl, lblValorAFP,
                 lblSaludDescLbl, lblValorSalud,
+                lblCotizLbl, lblCotizObl,
+                lblRentaLbl, lblRenta,
                 pnlLiquidoBorder,
                 btnGuardar, btnListar
             });
