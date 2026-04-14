@@ -15,6 +15,13 @@ namespace GestionSueldos.Forms
             InitializeComponent();
             _empleadoRepo = new EmpleadoFileRepository();
             _authService  = new AuthService(_empleadoRepo);
+            
+            // Auto-login admin si DEBUG para testing
+            #if DEBUG
+            txtUsuario.Text = "admin";
+            txtContrasena.Text = "admin123";
+            btnIniciarSesion_Click(null, null);
+            #endif
         }
 
         private void btnIniciarSesion_Click(object sender, EventArgs e)
