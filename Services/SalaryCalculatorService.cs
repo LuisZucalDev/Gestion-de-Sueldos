@@ -5,13 +5,11 @@ using GestionSueldos.Models;
 namespace GestionSueldos.Services
 {
     /// <summary>
-    /// Servicio de cálculo de remuneraciones.
-    /// Toda la lógica de negocio reside aquí, separada de los formularios.
-    /// Patrón: Service Layer.
+    /// Servicio de cálculo de remuneraciones Chile 2024.
+    /// +Cotiz obligatoria 7%, impuesto renta simplificado.
     /// </summary>
     public class SalaryCalculatorService
     {
-        // ── Tasas AFP ──────────────────────────────────────────────────────────
         private static readonly Dictionary<string, decimal> TasasAFP =
             new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase)
         {
@@ -21,7 +19,6 @@ namespace GestionSueldos.Services
             { "PROVIDA", 0.13m },
         };
 
-        // ── Tasas de Salud ─────────────────────────────────────────────────────
         private static readonly Dictionary<string, decimal> TasasSalud =
             new Dictionary<string, decimal>(StringComparer.OrdinalIgnoreCase)
         {
@@ -31,58 +28,46 @@ namespace GestionSueldos.Services
             { "BANMEDICA",0.15m },
         };
 
-        // ── Valores por defecto ────────────────────────────────────────────────
         private const decimal VALOR_HORA_DEFAULT  = 5_000m;
         private const decimal VALOR_EXTRA_DEFAULT = 7_000m;
 
-        /// <summary>
-        /// Retorna los nombres de las AFP disponibles.
-        /// </summary>
-        public IEnumerable<string> ObtenerNombresAFP()  => TasasAFP.Keys;
-
-        /// <summary>
-        /// Retorna los nombres de los sistemas de salud disponibles.
-        /// </summary>
+        public IEnumerable<string> ObtenerNombresAFP() => TasasAFP.Keys;
         public IEnumerable<string> ObtenerNombresSalud() => TasasSalud.Keys;
 
-        /// <summary>
-        /// Calcula el sueldo completo de un empleado.
-        /// </summary>
-        /// <param name="horasTrabajadas">Horas normales trabajadas en el mes.</param>
-        /// <param name="horasExtras">Horas extras trabajadas.</param>
-        /// <param name="afp">Nombre de la AFP seleccionada.</param>
-        /// <param name="salud">Nombre del sistema de salud seleccionado.</param>
-        /// <param name="valorHora">Valor por hora (usa default si es 0).</param>
-        /// <param name="valorExtra">Valor por hora extra (usa default si es 0).</param>
-        /// <returns>ResultadoSueldo con todos los cálculos detallados.</returns>
         public ResultadoSueldo Calcular(
             decimal horasTrabajadas,
             decimal horasExtras,
-            string  afp,
-            string  salud,
-            decimal valorHora  = 0,
+            string afp,
+            string salud,
+            decimal valorHora = 0,
             decimal valorExtra = 0)
         {
-            if (horasTrabajadas < 0) throw new ArgumentException("Las horas trabajadas no pueden ser negativas.");
-            if (horasExtras < 0)    throw new ArgumentException("Las horas extras no pueden ser negativas.");
-            if (!TasasAFP.ContainsKey(afp))    throw new ArgumentException($"AFP no reconocida: {afp}");
-            if (!TasasSalud.ContainsKey(salud)) throw new ArgumentException($"Salud no reconocida: {salud}");
+            if (horasTrabajadas < 0) throw new ArgumentException("Horas trabajadas inválidas.");
+            if (horasExtras < 0) throw new ArgumentException("Horas extras inválidas.");
+            TasasAFP.TryGetValue(afp, out decimal tasaAFP);
+            TasasSalud.TryGetValue(salud, out decimal tasaSalud);
 
-            decimal vh  = valorHora  > 0 ? valorHora  : VALOR_HORA_DEFAULT;
+            decimal vh = valorHora > 0 ? valorHora : VALOR_HORA_DEFAULT;
             decimal vhe = valorExtra > 0 ? valorExtra : VALOR_EXTRA_DEFAULT;
 
-            decimal sueldoBruto    = (horasTrabajadas * vh) + (horasExtras * vhe);
-            decimal descuentoAFP   = sueldoBruto * TasasAFP[afp];
-            decimal descuentoSalud = sueldoBruto * TasasSalud[salud];
+            decimal sueldoBase = (horasTrabajadas * vh) + (horasExtras * vhe);
+            decimal cotizOblig = sueldoBase * 0.07m; // AFP obligatoria
+            decimal imponible = sueldoBase - cotizOblig;
+            decimal renta = Math.Max(0, imponible * 0.04m - 100_000m); // Tramo 1 simplificado
+            decimal afpDesc = sueldoBase * tasaAFP;
+            decimal saludDesc = sueldoBase * tasaSalud;
 
             return new ResultadoSueldo
             {
-                SueldoBruto    = sueldoBruto,
-                DescuentoAFP   = descuentoAFP,
-                DescuentoSalud = descuentoSalud,
-                AfpNombre      = afp.ToUpper(),
-                SaludNombre    = salud.ToUpper(),
+                SueldoBruto      = sueldoBase,
+                CotizObligatoria = cotizOblig,
+                ImpuestoRenta    = renta,
+                DescuentoAFP     = afpDesc,
+                DescuentoSalud   = saludDesc,
+                AfpNombre        = afp.ToUpper(),
+                SaludNombre      = salud.ToUpper(),
             };
         }
     }
 }
+
