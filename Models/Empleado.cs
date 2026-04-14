@@ -12,6 +12,26 @@ namespace GestionSueldos.Models
         public decimal ValorHora  { get; set; }
         public decimal ValorExtra { get; set; }
 
+        public bool IsValidRut()
+        {
+            if (string.IsNullOrWhiteSpace(Rut) || Rut.Length < 8) return false;
+            Rut = Rut.Replace(".", "").Replace("-", "").ToUpper();
+            if (!char.IsDigit(Rut[0])) return false;
+
+            int sum = 0;
+            int multiplier = 2;
+            for (int i = Rut.Length - 2; i >= 0; i--)
+            {
+                int digit = int.Parse(Rut[i].ToString()) * multiplier;
+                sum += digit / 10 + digit % 10;
+                multiplier = multiplier == 2 ? 3 : 2;
+            }
+            int dvCalc = 11 - (sum % 11);
+            dvCalc = dvCalc == 11 ? 0 : dvCalc == 10 ? 'K' : dvCalc;
+
+            return Rut[^1] == (dvCalc == 'K' ? 'K' : dvCalc.ToString()[0]);
+        }
+
         public Empleado() { }
 
         public Empleado(string rut, string nombre, string direccion,

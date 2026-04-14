@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
+using GestionSueldos.Forms;
 using GestionSueldos.Models;
 using GestionSueldos.Repositories;
 
@@ -30,9 +32,11 @@ namespace GestionSueldos.Forms
             for (int i = 0; i < _empleados.Count; i++)
             {
                 Empleado emp = _empleados[i];
-                string sueldo = (ultimoSueldo != null && i == _empleados.Count - 1)
-                    ? ultimoSueldo.SueldoLiquido.ToString("C", new System.Globalization.CultureInfo("es-CL"))
-                    : "No disponible";
+                string sueldo = "No disponible";
+                if (ultimoSueldo != null)
+                {
+                    sueldo = ultimoSueldo.SueldoLiquido.ToString("C", new System.Globalization.CultureInfo("es-CL"));
+                }
 
                 dgv.Rows.Add(emp.Rut, emp.Nombre, emp.Direccion, emp.Telefono, sueldo);
             }

@@ -48,5 +48,18 @@ namespace GestionSueldos.Repositories
             lineas.RemoveAll(l => l.StartsWith(rut));
             File.WriteAllLines(_filePath, lineas);
         }
+
+        public Empleado BuscarPorRut(string rut)
+        {
+            if (!File.Exists(_filePath)) return null;
+
+            foreach (string linea in File.ReadAllLines(_filePath))
+            {
+                Empleado emp = Empleado.FromFileLine(linea);
+                if (emp != null && emp.Rut.Trim().Equals(rut.Trim(), StringComparison.OrdinalIgnoreCase))
+                    return emp;
+            }
+            return null;
+        }
     }
 }

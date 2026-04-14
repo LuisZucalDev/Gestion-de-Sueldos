@@ -62,6 +62,14 @@ public partial class FrmAdministrador : BaseForm
                 txtRut.Focus();
                 return false;
             }
+            var tempEmp = new Empleado { Rut = txtRut.Text.Trim() };
+            if (!tempEmp.IsValidRut())
+            {
+                MessageBox.Show("RUT inválido. Formato Chile requerido (ej: 12.345.678-K).", "Validación",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtRut.Focus();
+                return false;
+            }
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
                 MessageBox.Show("El nombre es requerido.", "Validación",

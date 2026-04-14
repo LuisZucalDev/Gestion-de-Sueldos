@@ -39,6 +39,7 @@ namespace GestionSueldos.Services
             decimal horasExtras,
             string afp,
             string salud,
+            Empleado empleado = null,
             decimal valorHora = 0,
             decimal valorExtra = 0)
         {
@@ -49,8 +50,8 @@ namespace GestionSueldos.Services
             if (!TasasSalud.TryGetValue(salud, out decimal tasaSalud))
                 throw new ArgumentException($"Salud no reconocida: {salud}");
 
-            decimal vh = valorHora > 0 ? valorHora : VALOR_HORA_DEFAULT;
-            decimal vhe = valorExtra > 0 ? valorExtra : VALOR_EXTRA_DEFAULT;
+            decimal vh = (empleado?.ValorHora > 0 ? empleado.ValorHora : valorHora > 0 ? valorHora : VALOR_HORA_DEFAULT) ?? VALOR_HORA_DEFAULT;
+            decimal vhe = (empleado?.ValorExtra > 0 ? empleado.ValorExtra : valorExtra > 0 ? valorExtra : VALOR_EXTRA_DEFAULT) ?? VALOR_EXTRA_DEFAULT;
 
             decimal sueldoBase = (horasTrabajadas * vh) + (horasExtras * vhe);
             decimal cotizOblig = sueldoBase * 0.07m; // AFP obligatoria

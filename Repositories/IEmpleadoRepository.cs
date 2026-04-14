@@ -12,5 +12,6 @@ namespace GestionSueldos.Repositories
         IEnumerable<Empleado> ObtenerTodos();
         void Agregar(Empleado empleado);
         void Eliminar(string rut);
+        Empleado BuscarPorRut(string rut);
     }
 }

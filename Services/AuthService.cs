@@ -11,8 +11,17 @@ namespace GestionSueldos.Services
     /// </summary>
     public class AuthService
     {
-        private const string ADMIN_USER     = "admin";
-        private const string ADMIN_PASSWORD = "admin";
+    private static readonly string ADMIN_USER_HASH = SimpleHash("admin123"); // Default pass
+
+        private static string SimpleHash(string pass)
+        {
+            uint hash = 0;
+            foreach (char c in pass)
+            {
+                hash = ((hash << 5) + hash) + (uint)c;
+            }
+            return hash.ToString("X8");
+        }
 
         private readonly IEmpleadoRepository _empleadoRepo;
 
@@ -32,8 +41,8 @@ namespace GestionSueldos.Services
                 return TipoUsuario.Desconocido;
 
             // ── Administrador ──────────────────────────────────────────────────
-            if (usuario.Equals(ADMIN_USER, StringComparison.OrdinalIgnoreCase) &&
-                contrasena.Equals(ADMIN_PASSWORD, StringComparison.OrdinalIgnoreCase))
+            if (usuario.Equals("admin", StringComparison.OrdinalIgnoreCase) &&
+                SimpleHash(contrasena) == ADMIN_USER_HASH)
                 return TipoUsuario.Administrador;
 
             // ── Usuario Normal: RUT como usuario, primeros 4 dígitos como clave ─

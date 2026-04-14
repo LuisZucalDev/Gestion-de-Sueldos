@@ -11,6 +11,7 @@ namespace GestionSueldos.Forms
     public partial class FrmCalculadoraSueldo : BaseForm
     {
         private readonly SalaryCalculatorService _calculadoraService;
+        private readonly IEmpleadoRepository     _empleadoRepo;
         private readonly ISueldoRepository       _sueldoRepo;
         private ResultadoSueldo                  _ultimoResultado;
 
@@ -18,6 +19,7 @@ namespace GestionSueldos.Forms
         {
             InitializeComponent();
             _calculadoraService = new SalaryCalculatorService();
+            _empleadoRepo       = new EmpleadoFileRepository();
             _sueldoRepo         = new SueldoFileRepository();
 
             // Poblar combos desde el servicio
@@ -38,10 +40,12 @@ namespace GestionSueldos.Forms
                 string extrasStr = txtHorasExtras.Text.Trim();
                 decimal extras = string.IsNullOrEmpty(extrasStr) ? 0 : decimal.Parse(extrasStr, CultureInfo.InvariantCulture);
 
+                Empleado emp = _empleadoRepo.BuscarPorRut(txtRut?.Text.Trim()); // Add txtRut textbox
                 _ultimoResultado = _calculadoraService.Calcular(
                     horas, extras,
                     cmbAFP.SelectedItem.ToString(),
-                    cmbSalud.SelectedItem.ToString()
+                    cmbSalud.SelectedItem.ToString(),
+                    emp
                 );
 
                 // Configurar cultura para mostrar pesos chilenos
